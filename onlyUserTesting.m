@@ -20,6 +20,7 @@ numUsertesting = numFolders;
 
 
 for i = 1:numFolders
+    
    if ~(strcmpi(folders(i).name, '.') || strcmpi(folders(i).name, '..') || strcmpi(folders(i).name, '.DS_Store'))  
     
     info = load(['testing/' folders(i).name '/userData.mat']) ;
