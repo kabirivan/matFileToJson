@@ -72,7 +72,46 @@ for i = 1:3
     userTraining.(user).userInfo.armPerimeterInCm = userData.userInfo.armPerimeter;
     userTraining.(user).userInfo.date = datestr(userData.extraInfo.date);
     
-       
+    %% Synchronization Gesture Samples
+    
+     for kSyn = 1:5
+        sample = sprintf('sample%d',kSyn);
+        userTraining.(user).synchronizationGesture.(sample).startPointforGestureExecution  = userData.sync{kSyn, 1}.pointGestureBegins; 
+        userTraining.(user).synchronizationGesture.(sample).myoDetection                   = userData.sync{kSyn, 1}.pose_myo;
+        
+        numberRotationMatrix = length(userData.sync{kSyn, 1}.rot);
+        
+         for rm = 1:numberRotationMatrix
+            matrix = sprintf('quaternion%d',rm);
+
+            userTraining.(user).synchronizationGesture.(sample).quaternion.(matrix) = rotm2quat(userData.sync{kSyn, 1}.rot(:,:,rm)); 
+
+         end
+         
+         for ch = 1:8
+               
+                channel = sprintf('ch%d',ch);
+                userTraining.(user).synchronizationGesture.(sample).emg.(channel) = userData.sync{kSyn, 1}.emg(:,ch);
+             
+         end
+
+        dofnames = ["x","y","z"];
+
+        for dof = 1 : 3
+            
+            xyz = sprintf('%s',dofnames(dof));
+            userTraining.(user).synchronizationGesture.(sample).gyroscope.(xyz) = userData.sync{kSyn, 1}.gyro(:,dof);
+            userTraining.(user).synchronizationGesture.(sample).accelerometer.(xyz) = userData.sync{kSyn, 1}.accel(:,dof);
+
+        end
+        
+        
+    end
+    
+    
+    
+    
+    
        
        
    end
