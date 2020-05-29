@@ -551,10 +551,29 @@ for i = 1:3
         end    
             
      end    
-        
-        
+             
   
    end     
  end
     
 end
+
+
+userList = fieldnames(userTraining);
+savePath = './JSONtraining/'; %  String of the path to save your file in
+userNum = size(userList,1);
+ext = '.json';
+
+for i = 1:userNum
+  userchoose = userTraining.(userList{i});
+  txt = jsonencode(userchoose);
+  fileID = fopen([savePath userList{i} ext],'at');
+  fprintf(fileID,txt);   
+end
+
+
+
+
+
+
+
