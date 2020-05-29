@@ -188,7 +188,7 @@ for i = 1:3
    %% Open Gesture
    
    
-        if userData.training{kRep, 1}.gestureName == 'open'
+       if userData.training{kRep, 1}.gestureName == 'open'
             
             c = c+1;
             sample = sprintf('sample%d',c);
@@ -220,6 +220,44 @@ for i = 1:3
             
             
         end 
+        
+   %% Pinch Gesture
+   
+   
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
+       if userData.training{kRep, 1}.gestureName == 'pinch'
+
+        d = d+1;
+        sample = sprintf('sample%d',d);
+        userTraining.(user).trainingSamples.pinch.(sample).startPointforGestureExecution  = userData.training{kRep, 1}.pointGestureBegins;  
+        userTraining.(user).trainingSamples.pinch.(sample).groundTruth =                    userData.training{kRep, 1}.groundTruth;
+        userTraining.(user).trainingSamples.pinch.(sample).groundTruthIndex =               userData.training{kRep, 1}.groundTruthIndex;
+        userTraining.(user).trainingSamples.pinch.(sample).myoDetection  =                  userData.training{kRep, 1}.pose_myo;
+
+
+        numberRotationMatrix = length(userData.training{kRep, 1}.rot);
+
+        for rm = 1:numberRotationMatrix
+            matrix = sprintf('quaternion%d',rm);
+            userTraining.(user).trainingSamples.pinch.(sample).quaternions.(matrix) = rotm2quat(userData.training{kRep, 1}.rot(:,:,rm));
+        end 
+
+        for ch = 1:8
+            channel = sprintf('ch%d',ch);
+            userTraining.(user).trainingSamples.pinch.(sample).emg.(channel) = userData.training{kRep, 1}.emg(:,ch);
+        end
+
+        dofnames = ["x","y","z"];
+
+        for dof = 1 : 3
+            xyz = sprintf('%s',dofnames(dof));
+            userTraining.(user).trainingSamples.pinch.(sample).gyroscope.(xyz) = userData.training{kRep, 1}.gyro(:,dof);
+            userTraining.(user).trainingSamples.pinch.(sample).accelerometer.(xyz) = userData.training{kRep, 1}.accel(:,dof);
+        end
+
+      end
+        
+        
      
     
    %% WaveIn Gesture  
