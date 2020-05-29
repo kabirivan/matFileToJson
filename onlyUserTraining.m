@@ -108,7 +108,8 @@ for i = 1:3
         
      end
  
-     
+ 
+ %% Training Samples    
      
   for kRep = 1:150    
       
@@ -255,8 +256,42 @@ for i = 1:3
             userTraining.(user).trainingSamples.pinch.(sample).accelerometer.(xyz) = userData.training{kRep, 1}.accel(:,dof);
         end
 
-      end
+       end
+       
+       
+    %% WaveOut Gesture   
+    
+    if userData.training{kRep, 1}.gestureName == 'waveOut'
         
+        e = e+1;
+        sample = sprintf('sample%d',e);
+        userTraining.(user).trainingSamples.waveOut.(sample).startPointforGestureExecution  = userData.training{kRep, 1}.pointGestureBegins;
+        userTraining.(user).trainingSamples.waveOut.(sample).groundTruth =                    userData.training{kRep, 1}.groundTruth;
+        userTraining.(user).trainingSamples.waveOut.(sample).groundTruthIndex =               userData.training{kRep, 1}.groundTruthIndex;
+        userTraining.(user).trainingSamples.waveOut.(sample).myoDetection  =                  userData.training{kRep, 1}.pose_myo;
+
+
+        numberRotationMatrix = length(userData.training{kRep, 1}.rot);
+
+        for rm = 1:numberRotationMatrix
+            matrix = sprintf('quaternion%d',rm);
+            userTraining.(user).trainingSamples.waveOut.(sample).quaternion.(matrix) = rotm2quat(userData.training{kRep, 1}.rot(:,:,rm)); 
+        end
+
+        for ch = 1:8
+            channel = sprintf('ch%d',ch);
+            userTraining.(user).trainingSamples.waveOut.(sample).emg.(channel) = userData.training{kRep, 1}.emg(:,ch);
+        end
+
+        dofnames = ["x","y","z"];
+
+        for dof = 1 : 3
+            xyz = sprintf('%s',dofnames(dof));
+            userTraining.(user).trainingSamples.waveOut.(sample).gyroscope.(xyz) = userData.training{kRep, 1}.gyro(:,dof);
+            userTraining.(user).trainingSamples.waveOut.(sample).accelerometer.(xyz) = userData.training{kRep, 1}.accel(:,dof);
+        end    
+            
+     end    
         
      
     
@@ -299,16 +334,106 @@ for i = 1:3
     
  
   
+  %% Testing Samples
   
+  % Auxiliar variables for hand gestures
+    a=0;
+    b=0;
+    c=0;
+    d=0;
+    e=0;
+    f=0;
+
+  for kRep = 1:150  
   
-  
-  
-  
-  
+    %%  No Gesture (Testing)
+    if userData.testing{kRep, 1}.gestureName == 'noGesture'
+        
+        a = a+1;
+        
+        sample = sprintf('sample%d',a);
+        userTraining.(user).testingSamples.noGesture.(sample).startPointforGestureExecution  = userData.testing{kRep, 1}.pointGestureBegins; 
+        userTraining.(user).testingSamples.noGesture.(sample).myoDetection  =                  userData.testing{kRep, 1}.pose_myo;
+        numberRotationMatrix = length(userData.testing{kRep, 1}.rot);
+
+        for rm = 1:numberRotationMatrix
+           matrix = sprintf('quaternion%d',rm);
+           userTraining.(user).testingSamples.noGesture.(sample).quaternion.(matrix) = rotm2quat(userData.testing{kRep, 1}.rot(:,:,rm)); 
+        end
+
+       for ch = 1:8
+        channel = sprintf('ch%d',ch);
+        userTraining.(user).testingSamples.noGesture.(sample).emg.(channel) = userData.testing{kRep, 1}.emg(:,ch);
+       end
+
+       dofnames = ["x","y","z"];
+
+       for dof = 1 : 3
+           xyz = sprintf('%s',dofnames(dof));
+           userTraining.(user).testingSamples.noGesture.(sample).gyroscope.(xyz) = userData.testing{kRep, 1}.gyro(:,dof);
+           userTraining.(user).testingSamples.noGesture.(sample).accelerometer.(xyz) = userData.testing{kRep, 1}.accel(:,dof);
+
+       end
+    end 
+    
+    %% Fist Gesture (testing)
+    
+         if userData.testing{kRep, 1}.gestureName == 'fist'
+             
+            b = b+1;
+            sample = sprintf('sample%d',b);
+            userTraining.(user).testingSamples.fist.(sample).startPointforGestureExecution  = userData.testing{kRep, 1}.pointGestureBegins;  
+            userTraining.(user).testingSamples.fist.(sample).groundTruth =                    userData.testing{kRep, 1}.groundTruth;
+            userTraining.(user).testingSamples.fist.(sample).groundTruthIndex =               userData.testing{kRep, 1}.groundTruthIndex;
+            userTraining.(user).testingSamples.fist.(sample).myoDetection  =                  userData.testing{kRep, 1}.pose_myo;
+            
+            
+            numberRotationMatrix = length(userData.testing{kRep, 1}.rot);
+            
+            for rm = 1:numberRotationMatrix
+                matrix = sprintf('quaternion%d',rm);
+                userTraining.(user).testingSamples.fist.(sample).quaternion.(matrix) = rotm2quat(userData.testing{kRep, 1}.rot(:,:,rm));
+            end   
+            
+            
+            for ch = 1:8
+                channel = sprintf('ch%d',ch);
+                userTraining.(user).testingSamples.fist.(sample).emg.(channel) = userData.testing{kRep, 1}.emg(:,ch);
+            end
+
+            dofnames = ["x","y","z"];
+
+            for dof = 1 : 3
+                xyz = sprintf('%s',dofnames(dof));
+                userTraining.(user).testingSamples.fist.(sample).gyroscope.(xyz) =     userData.testing{kRep, 1}.gyro(:,dof);
+                userTraining.(user).testingSamples.fist.(sample).accelerometer.(xyz) = userData.testing{kRep, 1}.accel(:,dof);
+
+            end
+            
+         end
+        
+         
+         
+         
+         
+ 
     
     
-       
-       
+    
+    
+    
+    
+  
+  end     
+    
+  
+  
+  
+  
+  
+  
+  
+  
    end
     
 end
