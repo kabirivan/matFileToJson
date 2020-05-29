@@ -107,9 +107,45 @@ for i = 1:3
         
         
      end
+ 
+     
+     
+  for kRep = 1:150     
+   %% noGesture Gesture   
+   
+   if userData.training{kRep, 1}.gestureName == 'noGesture'
+       
+      a = a+1;
+      sample = sprintf('sample%d',a);
+
+      userTraining.(user).trainingSamples.noGesture.(sample).startPointforGestureExecution  = userData.training{kRep, 1}.pointGestureBegins; 
+      userTraining.(user).trainingSamples.noGesture.(sample).myoDetection  =                  userData.training{kRep, 1}.pose_myo;
+
+      numberRotationMatrix = length(userData.training{kRep, 1}.rot);
+
+      for rm = 1:numberRotationMatrix
+         matrix = sprintf('quaternion%d',rm);
+         userTraining.(user).trainingSamples.noGesture.(sample).quaternion.(matrix) = rotm2quat(userData.training{kRep, 1}.rot(:,:,rm)); 
+      end
+
+       for ch = 1:8
+          channel = sprintf('ch%d',ch);
+          userTraining.(user).trainingSamples.noGesture.(sample).emg.(channel) = userData.training{kRep, 1}.emg(:,ch);
+       end
+
+       dofnames = ["x","y","z"];
+
+       for dof = 1 : 3
+           xyz = sprintf('%s',dofnames(dof));
+           userTraining.(user).trainingSamples.noGesture.(sample).gyroscope.(xyz) = userData.training{kRep, 1}.gyro(:,dof);
+           userTraining.(user).trainingSamples.noGesture.(sample).accelerometer.(xyz) = userData.training{kRep, 1}.accel(:,dof);
+
+       end
+   end 
+     
+     
     
-    
-   %% WaveIn Gestures  
+   %% WaveIn Gesture  
     
     if userData.training{kRep, 1}.gestureName == 'waveIn'
         
@@ -142,6 +178,10 @@ for i = 1:3
         end    
 
     end
+    
+    
+  end
+    
  
     
     
