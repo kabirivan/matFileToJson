@@ -110,7 +110,8 @@ for i = 1:3
  
      
      
-  for kRep = 1:150     
+  for kRep = 1:150    
+      
    %% noGesture Gesture   
    
    if userData.training{kRep, 1}.gestureName == 'noGesture'
@@ -143,6 +144,43 @@ for i = 1:3
        end
    end 
      
+   
+   %% Open Gesture
+   
+    
+        if userData.training{kRep, 1}.gestureName == 'fist'
+            
+            b=b+1;
+            sample = sprintf('sample%d',b);
+            
+            userTraining.(user).trainingSamples.fist.(sample).startPointforGestureExecution  = userData.training{kRep, 1}.pointGestureBegins;
+            userTraining.(user).trainingSamples.fist.(sample).groundTruth                    = userData.training{kRep, 1}.groundTruth;
+            userTraining.(user).trainingSamples.fist.(sample).groundTruthIndex               = userData.training{kRep, 1}.groundTruthIndex;
+            userTraining.(user).trainingSamples.fist.(sample).myoDetection                   = userData.training{kRep, 1}.pose_myo;
+            
+            
+            numberRotationMatrix = length(userData.training{kRep, 1}.rot);
+            
+            for rm = 1:numberRotationMatrix
+             matrix = sprintf('quaternion%d',rm);
+             userTraining.(user).trainingSamples.fist.(sample).quaternion.(matrix) = rotm2quat(userData.training{kRep, 1}.rot(:,:,rm)); 
+            end
+
+            for ch = 1:8
+                channel = sprintf('ch%d',ch);
+                userTraining.(user).trainingSamples.fist.(sample).emg.(channel) = userData.training{kRep, 1}.emg(:,ch);
+            end
+
+            dofnames = ["x","y","z"];
+
+            for dof = 1 : 3
+                xyz = sprintf('%s',dofnames(dof));
+                userTraining.(user).trainingSamples.fist.(sample).gyroscope.(xyz) = userData.training{kRep, 1}.gyro(:,dof);
+                userTraining.(user).trainingSamples.fist.(sample).accelerometer.(xyz) = userData.training{kRep, 1}.accel(:,dof);
+
+            end
+            
+        end 
      
     
    %% WaveIn Gesture  
@@ -183,6 +221,13 @@ for i = 1:3
   end
     
  
+  
+  
+  
+  
+  
+  
+  
     
     
        
