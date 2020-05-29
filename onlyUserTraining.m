@@ -2,6 +2,11 @@ close all
 clear all
 clc
 
+% Xavier Aguas.
+% Artificial Intelligence and Computer Vision Research Lab
+% Escuela Politécnica Nacional, Quito - Ecuador
+% xavier.aguas@epn.edu.ec
+% May 29, 2020
 
 %% Load training data  
 
@@ -9,7 +14,7 @@ folders = dir('training');
 numFolders = length(folders);
 
 
-for i = 1:3
+for i = 1:numFolders
     
    if ~(strcmpi(folders(i).name, '.') || strcmpi(folders(i).name, '..') || strcmpi(folders(i).name, '.DS_Store'))
    info = load(['training/' folders(i).name '/userData.mat']) ;
@@ -567,7 +572,7 @@ ext = '.json';
 for i = 1:userNum
   userchoose = userTraining.(userList{i});
   txt = jsonencode(userchoose);
-  fileID = fopen([savePath userList{i} ext],'at');
+  fileID = fopen([savePath userList{i} ext],'wt');
   fprintf(fileID,txt);   
 end
 
